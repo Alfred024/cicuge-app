@@ -9,13 +9,22 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;   
+
+            .Capture-Photo-Btn{
+                padding: 10px;
+                background-color: rgb(184, 182, 182);
+                border-radius: 100%;
+                width: 50px;
+                height: 50px;
+                border: solid black 1px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="videoContainer" style="display: none; width:100%; height:100%;">
-        <video id="videoElement" autoplay></video>
-        <button onclick="takePhoto()" id="takePhotoBtn" style="border-radius:100%; padding: 10px;  position: relative; bottom:10px;">Tomar foto</button>
+    <div id="videoContainer" style="display: none; width:100vw; height:100vh; position:relative;">
+        <video style="width:100%; height:100%;" id="videoElement" autoplay></video>
+        <button style="position:absolute;" class="Capture-Photo-Btn" onclick="takePhoto()" id="takePhotoBtn"></button>
     </div>
     <div>
         <button onclick="openCamera()" id="openCameraBtn">TOMAR UNA FOTO</button>
@@ -23,10 +32,11 @@
     <canvas id="canvasElement" style="display: none;"></canvas>
 
     <script>
+        var video = document.getElementById('videoElement');
+        var canvas = document.getElementById('canvasElement');
+
         function openCamera(){
             if(isMediaDevicesSupoorted()){
-                var video = document.getElementById('videoElement');
-                
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function(stream) {
                         video.srcObject = stream;
@@ -35,32 +45,20 @@
                     .catch(function(error) {
                         console.error('Error accessing the camera:', error);
                     });
-                    
+                // Esconde el botón para mostrar la cámara 
                 var openCameraBtn = document.getElementById('openCameraBtn');
                 openCameraBtn.style.display = "none";
                 
                 var videoContainer = document.getElementById('videoContainer');
                 videoContainer.style.display = "block";
-
-                var canvas = document.getElementById('canvasElement');
-                var context = canvas.getContext('2d');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                paintVideo();
             }else{
                 return; // TODO: Mandar mensaje, el navegador no soporta el getUserMedia
             }
         }
 
         function takePhoto(){
-            var video = document.getElementById('videoElement');
-            var canvas = document.getElementById('canvasElement');
-            var context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            //TOMACIÓN DE LA FOTO
+            paintVideo();
             var imageDataUrl = canvas.toDataURL('image/jpeg');
             processImage(imageDataUrl);
         }
@@ -72,8 +70,11 @@
             return false; 
         }
 
-        function paintCanva(){
-
+        function paintVideo(){
+            var context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
         }
 
         function processImage(imageDataUrl) {
@@ -90,7 +91,7 @@
             //     console.error('Error processing image:', error);
             // });
         }
-    
+        // Lectura de los QR´s
     </script>
 </body>
 </html>

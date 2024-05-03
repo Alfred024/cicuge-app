@@ -2,32 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+:root{
+  --primary-green: #C6EBC5;
+  --secondary-green: #114232;
+  --light-gray: #F6F5F2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.bg-primary-green{
+  background-color: var(--primary-green);
+}
+.bg-secondary-green{
+  background-color: var(--secondary-green);
+}
+.bg-light-gray{
+  background-color: var(--light-gray);
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.montserrat{
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.Capture-Photo-Btn{
+  padding: 10px;
+  background-color: rgb(184, 182, 182);
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  border: solid black 1px;
+}
+.Video-Container, .Canva-Container{
+  height: 100% !important;
 }
