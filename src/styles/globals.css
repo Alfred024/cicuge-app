@@ -34,6 +34,7 @@
   height: 50px;
   border: solid black 1px;
 }
-.Video-Container, .Canva-Container{
+.Video-Container, .Canva-Container, .WebCam-Container{
   height: 100% !important;
+  width: 100% !important;
 }

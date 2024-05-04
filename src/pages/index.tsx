@@ -1,38 +1,14 @@
 'use client'
 import Image from "next/image";
+import Camera from "../components/camera"; 
 import { Inter } from "next/font/google";
-import {useState, useEffect} from "react";
+import { useState, useEffect, useRef } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-
+  // Show Webcam
   const [showVideo, setShowVideo] = useState(false);
-  // useEffect(()=>{
-  //   if(showVideo){
-      
-  //   }
-  // }, [showVideo]);
-    
-  function openCamera(){
-    // navigator.mediaDevices.getUserMedia({ video: true })
-    //         .then(function(stream) {
-    //             video.srcObject = stream;
-    //             video.play();
-    //         })
-    //         .catch(function(error) {
-    //             console.error('Error accessing the camera:', error);
-    //         });
-    //     // Esconde el botón para mostrar la cámara 
-    // var openCameraBtn = document.getElementById('openCameraBtn');
-    // openCameraBtn.style.display = "none";
-        
-    // var videoContainer = document.getElementById('videoContainer');
-    // videoContainer.style.display = "block";
-    // paintVideo();
-  } 
-
-
 
   return (
     <main
@@ -53,19 +29,11 @@ export default function Home() {
             <button onClick={()=>setShowVideo(true)} className="bg-secondary-green rounded-2xl p-2 text-white" type="submit">Analizar planta</button>
           </div>
         ) : (
-          <div className="relative w-full h-4/5" style={{borderRadius: "30px"}}>
-            {/* <button id="start-camera">Start Camera</button> */}
-            <video className="Video-Container" id="video" width="100%" height="100%" autoPlay></video>
-            <div className="flex mt-2 w-full place-content-center">
-              <button className="bg-slate-100 border-spacing-1 border-x-black" id="click-photo" style={{borderRadius: "100%", width: "60px", height: "60px"}} ></button>
-            </div>
-            <canvas className="Canva-Container w-full absolute top-0" id="canvas"></canvas>
-          </div>
+          <Camera/>
         )
       }
-
-
     </main>
   );
-
 } 
+
+
