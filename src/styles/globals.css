@@ -28,13 +28,16 @@
 
 .Capture-Photo-Btn{
   padding: 10px;
-  background-color: rgb(184, 182, 182);
+  background-color: rgb(255, 255, 255);
   border-radius: 100%;
   width: 50px;
   height: 50px;
-  border: solid black 1px;
+  border: solid forestgreen 3px;
 }
 .Video-Container, .Canva-Container, .WebCam-Container{
-  height: 100% !important;
-  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* height: 100% !important;
+  width: 100% !important; */
 }

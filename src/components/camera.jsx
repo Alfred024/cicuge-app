@@ -21,9 +21,11 @@ const Camera = ()=>{
     // }
 
     return(
-        <div className="WebCam-Container relative">
+        <div className="WebCam-Container p-3 h-4/5">
             <Webcam
+                style={{borderRadius: "30px"}}
                 width={"100%"}
+                //height={"80%"}
                 ref={webcamRef}
                 audio={false}
                 screenshotFormat="image/jpeg"
@@ -31,10 +33,12 @@ const Camera = ()=>{
                 videoConstraints={videoConstraints}
             />
 
-            <button 
-                className="bg-slate-300 border-spacing-1 border-x-black absolute top-0" 
+            <div className="flex justify-center">
+                <button 
+                className="Capture-Photo-Btn m-auto border-spacing-1 border-x-black" 
                 style={{borderRadius: "100%", width: "60px", height: "60px"}}
                 onClick={takePhoto}></button>
+            </div>
             
         </div>
         // <div className="WebCam">
