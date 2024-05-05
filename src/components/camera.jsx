@@ -7,89 +7,46 @@ const videoConstraints = {
 };
 
 const Camera = ()=>{
-    const webcamRef = useRef(null);
-    const [url, setUrl] = useState(null);
+    const [file, setFile] = useState(null);
 
-    const takePhoto = useCallback(async () =>{
-        const imageSrc = webcamRef.current.getScreenshot();
-        console.log(imageSrc);
-        setUrl(imageSrc);
-        sendImageToProdict(imageSrc);
-    }, [webcamRef]);
+  const handleFileChange = (event) => {
+      setFile(event.target.files[0]);
+  };
 
-
-    // function sendImageToProdict(imageDataUrl) {
-    //     fetch('http://localhost:3001/predict', {
-    //         method: 'POST',
-    //         body: JSON.stringify({ image: imageDataUrl }),
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     }).then(response => {
-    //         console.log(response);
-    //         console.log('TODO BIEN EN LA APP WEB');
-    //     }).catch(error => {
-    //         console.error('Error processing image:', error);
-    //     });
-    // }
-
-    function sendImageToProdict(imageDataUrl) {
-        const formData = new FormData();
-        formData.append('image', imageDataUrl);
-
-        fetch('http://localhost:3001/predict', {
-            method: 'POST',
-            //body: String( imageDataUrl ),
-            body: formData,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Failed to process image');
-            }
-        }).then(data => {
-            console.log(data);
-            console.log('Image processed successfully');
-        }).catch(error => {
-            console.error('Error processing image:', error);
-        });
+  const handleUpload = () => {
+    if (!file){
+        return;
     }
-    
-    
-    // const onUserMedia = (e) =>{
-    //     console.log(e);
-    // }
+    // console.log('FILE');
+    // console.log(file);
+    const formData = new FormData();
+    formData.append('file', file);
+    //console.log(formData);
+    fetch('http://localhost:3001/predict', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+      console.log(data);
+      // Handle response from the server if needed
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  };
 
-    return(
-        <div className="WebCam-Container p-3 h-4/5">
-            <Webcam
-                style={{borderRadius: "30px"}}
-                width={"100%"}
-                //height={"80%"}
-                ref={webcamRef}
-                audio={false}
-                screenshotFormat="image/jpeg"
-                // onUserMedia={onUserMedia}
-                videoConstraints={videoConstraints}
-            />
-
-            <div className="flex justify-center">
-                <button 
-                className="Capture-Photo-Btn m-auto border-spacing-1 border-x-black" 
-                style={{borderRadius: "100%", width: "60px", height: "60px"}}
-                onClick={takePhoto}></button>
-            </div>
-            
-        </div>
-        // <div className="WebCam">
-        //     <video src="" ref={'videoRef'}></video>
-        //     <button className="bg-slate-300 border-spacing-1 border-x-black" id="click-photo" style={{borderRadius: "100%", width: "60px", height: "60px"}} ></button>
-        //     <canvas ref={'photoRef'}></canvas> 
-        // </div>
-    );
+  return (
+    <div>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload</button>
+    </div>
+  );
 }
 
 export default Camera;
