@@ -14,8 +14,51 @@ const Camera = ()=>{
         const imageSrc = webcamRef.current.getScreenshot();
         console.log(imageSrc);
         setUrl(imageSrc);
+        sendImageToProdict(imageSrc);
     }, [webcamRef]);
 
+
+    // function sendImageToProdict(imageDataUrl) {
+    //     fetch('http://localhost:3001/predict', {
+    //         method: 'POST',
+    //         body: JSON.stringify({ image: imageDataUrl }),
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     }).then(response => {
+    //         console.log(response);
+    //         console.log('TODO BIEN EN LA APP WEB');
+    //     }).catch(error => {
+    //         console.error('Error processing image:', error);
+    //     });
+    // }
+
+    function sendImageToProdict(imageDataUrl) {
+        const formData = new FormData();
+        formData.append('image', imageDataUrl);
+
+        fetch('http://localhost:3001/predict', {
+            method: 'POST',
+            //body: String( imageDataUrl ),
+            body: formData,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to process image');
+            }
+        }).then(data => {
+            console.log(data);
+            console.log('Image processed successfully');
+        }).catch(error => {
+            console.error('Error processing image:', error);
+        });
+    }
+    
+    
     // const onUserMedia = (e) =>{
     //     console.log(e);
     // }
