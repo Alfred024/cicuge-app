@@ -27,6 +27,7 @@ const Camera = ({setShowVideo})=>{
             body: formData,
         }).then(response => {
             if (response.ok) {
+                console.log('Tring to porcess');
                 return response.json();
             } else {
                 throw new Error('Failed to process image');
