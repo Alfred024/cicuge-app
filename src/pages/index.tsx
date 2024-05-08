@@ -37,7 +37,7 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <Camera/>
+          <Camera setShowVideo={setShowVideo}/>
         )
       }
     </main>

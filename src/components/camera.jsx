@@ -6,13 +6,13 @@ const videoConstraints = {
     facingMode: 'environment'
 };
 
-const Camera = ()=>{
+const Camera = ({setShowVideo})=>{
     const webcamRef = useRef(null);
     const [url, setUrl] = useState(null);
+    const [response, setResponse] = useState(null);
 
     const takePhoto = useCallback(async () =>{
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log(imageSrc);
         setUrl(imageSrc);
         sendImageToProdict(imageSrc);
     }, [webcamRef]);
@@ -25,9 +25,6 @@ const Camera = ()=>{
         fetch('http://localhost:3001/predict', {
             method: 'POST',
             body: formData,
-            headers: {
-                'Content-Type': 'application/json'
-            }
         }).then(response => {
             if (response.ok) {
                 return response.json();
@@ -35,25 +32,12 @@ const Camera = ()=>{
                 throw new Error('Failed to process image');
             }
         }).then(data => {
-            console.log(data);
-            console.log('Image processed successfully');
+            setResponse(data.prediction);
+            // console.log(data.prediction);
         }).catch(error => {
             console.error('Error processing image:', error);
         });
     }
-
-    // function convertBase64_to_formData(base64Url) {
-    //     return fetch(base64Url)
-    //       .then(response => response.blob())
-    //       .then(blob => {
-    //         const formData = new FormData();
-    //         formData.append('file', blob, 'filename'); // 'filename' is the name of the file
-    //         return formData;
-    //       })
-    //       .catch(error => {
-    //         console.error('There was an error converting base64 to FormData:', error);
-    //       });
-    // }
 
     function base64StringtoFile(base64String, filename) {
         const base64Image = base64String.split(';base64,').pop();
@@ -68,15 +52,14 @@ const Camera = ()=>{
     }
     
     return(
+        !response ? (
         <div className="WebCam-Container p-3 h-4/5">
             <Webcam
                 style={{borderRadius: "30px"}}
                 width={"100%"}
-                //height={"80%"}
                 ref={webcamRef}
                 audio={false}
-                screenshotFormat="image/jpeg"
-                // onUserMedia={onUserMedia}
+                screenshotFormat="image/png"
                 videoConstraints={videoConstraints}
             />
 
@@ -87,12 +70,27 @@ const Camera = ()=>{
                 onClick={takePhoto}></button>
             </div>
             
-        </div>
-        // <div className="WebCam">
-        //     <video src="" ref={'videoRef'}></video>
-        //     <button className="bg-slate-300 border-spacing-1 border-x-black" id="click-photo" style={{borderRadius: "100%", width: "60px", height: "60px"}} ></button>
-        //     <canvas ref={'photoRef'}></canvas> 
-        // </div>
+        </div>) 
+        :
+        ( 
+            response === 'Ready' ?
+            (<div className="relative m-auto w-3/4 min-h-48 p-3 rounded-2xl bg-green-800 text-white flex flex-col justify-center">
+                <img className="m-auto" width={70} height={70} src="/img/leaf.svg" alt="Leaf icon"/>
+                <h1 className="font-bold text-center">¡Genial!</h1>
+                <p className="text-center my-1"> El cultivo está listo para su consumo.</p>
+
+                <button className="mt-2 p-1 w-1/2 m-auto rounded-md font-bold bg-white text-green-950" onClick={() => setShowVideo(false)}>Continuar</button>
+            </div> )
+                :
+            (<div className="relative m-auto w-3/4 p-3 rounded-2xl bg-orange-500 text-white flex flex-col justify-center">
+                <img className="m-auto" width={70} height={70} src="/img/warning.png" alt="Warning icon"/>
+                <h1 className="font-bold text-center">¡Cuidado!</h1>
+                <p className="text-center my-1"> El cultivo aún no está listo para su consumo. Déjalo unos días en la cámara y prueba después.</p>
+
+                <button className="mt-2 p-1 w-1/2 m-auto rounded-md font-bold bg-white text-amber-700" onClick={() => setShowVideo(false)}>Continuar</button>
+            </div>)
+        )
+        
     );
 }
 
