@@ -22,7 +22,8 @@ const Camera = ({setShowVideo})=>{
         const formData = new FormData();
         formData.append('file', file);
         console.log('BOFORE POST');
-        fetch('http://localhost:3001/predict', {
+        // fetch('http://localhost:3001/predict', {
+        fetch('https://cigige-python-api.onrender.com/predict', {
             method: 'POST',
             body: formData,
         }).then(response => {
