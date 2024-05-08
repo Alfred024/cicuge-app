@@ -21,18 +21,19 @@ const Camera = ({setShowVideo})=>{
         const file = base64StringtoFile(imageDataUrl, 'demo.png');
         const formData = new FormData();
         formData.append('file', file);
-
+        console.log('BOFORE POST');
         fetch('http://localhost:3001/predict', {
             method: 'POST',
             body: formData,
         }).then(response => {
             if (response.ok) {
-                console.log('Tring to porcess');
+                console.log('Trying to process');
                 return response.json();
             } else {
                 throw new Error('Failed to process image');
             }
         }).then(data => {
+            console.log('pROCESSING JSON DATA');
             setResponse(data.prediction);
             // console.log(data.prediction);
         }).catch(error => {
